@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <center>
+      <h1>POST</h1>
+    <form>
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome"><br><br>
+      <label for="idade">Idade:</label>
+      <input type="number" id="idade" name="idade"><br><br>
+      <label for="idade">CPF:</label>
+      <input type="number" id="cpf" name="cpf"><br><br>
+      <button type="submit" onclick="enviarDados()">Enviar</button>
+      
+    </form>
+    <br>
+    <a href="GetDeletePUT.html">GET - PUT - DELETE</a>
+    <script>
+        // Função que envia dados para o servidor
+        function enviarDados() {
+          // Obtém o valor dos campos do formulário
+          const nome = document.getElementById("nome").value;
+          const idade = document.getElementById("idade").value;
+          const cpf = document.getElementById("cpf").value;
+  
+          // Envia os dados para o servidor utilizando o método fetch()
+          fetch('http://localhost:3000/pessoas', {
+            method: 'POST', // Método HTTP utilizado (POST)
+            headers: {
+              'Content-Type': 'application/json' // Tipo de conteúdo enviado (JSON)
+            },
+            body: JSON.stringify({ nome: nome, idade: idade, cpf: cpf }) // Dados a serem enviados (formato JSON)
+          })
+          .then(response => response.json()) // Converte a resposta para JSON
+        }
+  </script>
+  
+  </body>
+</html>

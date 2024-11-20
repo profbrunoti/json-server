@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Exibindo Dados do JSON Server</title>
+</head>
+<body>
+    <center>
+	<h1>JSON-SERVER - GET - PUT - DELETE</h1>
+    <h1>GET</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nome</th>
+				<th>Idade</th>
+				<th>CPF</th>
+			</tr>
+		</thead>
+		<tbody id="tabela-corpo">
+			
+		</tbody>
+	</table>
+
+	<h1>GET - PUT - DELETE</h1>
+        <label>ID:</label>
+        <input type="text" id="id" disabled><br>
+        <label>Nome:</label>
+        <input type="text" id="nomeAtualizar">
+        <br>
+        <label>Idade:</label>
+        <input type="text" id="idadeAtualizar">
+        <br>
+        <label>CPF:</label>
+        <input type="text" id="cpf" placeholder="Digite o cpf para busca">
+        <br><br>
+        <input type="button" onclick="buscarDados()" value="Buscar">
+        <input type="button" onclick="atualizarDados()" value="Atualizar">
+        <button type="button" onclick="deletarDados()">Deletar</button>
+        <br><br>
+
+        <a href="POST.html">POST</a>
+
+	<script>
+		//GET - PUT
+		//GET   
+        function buscarDados() {
+            const cpf = document.getElementById('cpf').value;
+            fetch(`http://localhost:3000/pessoas`, {
+                method: 'GET'
+            })  
+            .then(response => response.json())
+            .then(data => {
+                const pessoaEncontrada = data.find(pessoa => pessoa.cpf === cpf);
+                
+                console.log(data)
+                if (pessoaEncontrada) {
+                    document.getElementById('nomeAtualizar').value = pessoaEncontrada.nome;
+                    document.getElementById('idadeAtualizar').value = pessoaEncontrada.idade;
+                    document.getElementById('cpf').value = pessoaEncontrada.cpf;
+                    document.getElementById('id').value = pessoaEncontrada.id;
+                } else {
+                    alert('Pessoa não encontrada!');
+                }
+            })
+        }
+
+		//PUT
+		function atualizarDados() {
+                const id = document.getElementById('id').value;
+                const nome = document.getElementById('nomeAtualizar').value;
+                const idade = document.getElementById('idadeAtualizar').value;
+                const cpf = document.getElementById('cpf').value
+
+                fetch(`http://localhost:3000/pessoas/${id}`,{
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify({ nome: nome, idade: idade, cpf: cpf})
+                })
+                .then(response => response.json())
+            }
+
+
+        // Função que deleta dados do servidor
+        function deletarDados() {
+          // Obtém o valor do campo de ID
+          const id = document.getElementById("id").value;
+  
+          // Envia a requisição de delete para o servidor utilizando o método fetch()
+          fetch(`http://localhost:3000/pessoas/${id}`, {
+            method: 'DELETE' // Método HTTP utilizado (DELETE)
+          })
+          .then(response => response.json()) // Converte a resposta para JSON
+        }
+  </script>
+	<script src="GET.js"></script>
+</body>
+</html>
